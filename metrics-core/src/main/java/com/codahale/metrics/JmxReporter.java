@@ -712,7 +712,9 @@ public class JmxReporter implements Reporter, Closeable {
      * Starts the reporter.
      */
     public void start() {
-        registry.addListener(listener);
+        if (registry.isEnabled()) {
+            registry.addListener(listener);
+        }
     }
 
     /**

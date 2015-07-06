@@ -50,7 +50,31 @@ public class MetricRegistry implements MetricSet {
 
     private final ConcurrentMap<String, Metric> metrics;
     private final List<MetricRegistryListener> listeners;
+    private boolean enabled = true;
 
+    /**
+     * Enable and disable all metrics in this registry
+     * @param enabled new value for enabled
+     */
+    public void setEnabled(boolean enabled) {
+        if (this.enabled != enabled) {
+            this.enabled = enabled;
+            for (String key : metrics.keySet()) {
+                Metric metric = metrics.get(key);
+                if (metric instanceof Toggleable) {
+                    ((Toggleable) metric).setEnabled(enabled);
+                }
+            }
+        }
+    }
+
+    /**
+     * Check whether metrics in registry are enabled or disabled
+     * @return true if metrics is enabled otherwise false
+     */
+    public boolean isEnabled() {
+        return this.enabled;
+    }
     /**
      * Creates a new {@link MetricRegistry}.
      */

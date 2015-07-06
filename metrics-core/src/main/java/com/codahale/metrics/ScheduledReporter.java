@@ -112,7 +112,9 @@ public abstract class ScheduledReporter implements Closeable, Reporter {
             @Override
             public void run() {
                 try {
-                    report();
+                    if (registry.isEnabled()) {
+                        report();
+                    }
                 } catch (RuntimeException ex) {
                     LOG.error("RuntimeException thrown from {}#report. Exception was suppressed.", ScheduledReporter.this.getClass().getSimpleName(), ex);
                 }
